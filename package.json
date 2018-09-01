@@ -5,7 +5,7 @@
   "description": "Учебный проект «Код и Магия» от HTML Academy",
   "repository": {
     "type": "git",
-    "url": "git@github.com:htmlacademy-javascript/562487-code-and-magick.git"
+    "url": "git+ssh://git@github.com/htmlacademy-javascript/562487-code-and-magick.git"
   },
   "bugs": {
     "url": "https://github.com/htmlacademy-javascript/562487-code-and-magick/issues"
@@ -21,5 +21,8 @@
   },
   "engines": {
     "node": "8.11"
-  }
+  },
+  "homepage": "https://github.com/htmlacademy-javascript/562487-code-and-magick#readme",
+  "main": "index.js",
+  "author": ""
 }
