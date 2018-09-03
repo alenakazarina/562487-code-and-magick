@@ -1,28 +1,30 @@
 'use strict';
 window.renderStatistics = function (ctx, names, times) {
+  var CLOUD_WIDTH = 420;
+  var CLOUD_HEIGHT = 270;
+  var CLOUD_X = 100;
+  var CLOUD_Y = 10;
   var cloud = {
-    coords: [100, 10],
-    width: 420,
-    height: 270,
     fillColor: 'white',
     shadowColor: 'rgba(0, 0, 0, 0.7)',
-    draw: function () {
-      //  shadow
-      ctx.shadowColor = this.shadowColor;
-      ctx.shadowBlur = 10;
-      ctx.shadowOffsetX = 10;
-      ctx.shadowOffsetY = 10;
-      //  cloud
-      ctx.fillStyle = this.fillColor;
+    printShape: function (fillColor, offsetX, offsetY) {
+      ctx.fillStyle = fillColor;
       ctx.beginPath();
-      ctx.moveTo(155, 280);
-      ctx.bezierCurveTo(70, 270, 70, 20, 205, 50);
-      ctx.bezierCurveTo(150, -5, 450, -5, 415, 50);
-      ctx.bezierCurveTo(550, 20, 550, 270, 465, 280);
-      ctx.lineTo(155, 280);
+      ctx.moveTo(155 + offsetX, 280 + offsetY);
+      ctx.bezierCurveTo(70, 270, 70, 20, 205 + offsetX, 50 + offsetY);
+      ctx.bezierCurveTo(150, -5, 450, -5, 415 + offsetX, 50 + offsetY);
+      ctx.bezierCurveTo(550, 20, 550, 270, 465 + offsetX, 280 + offsetY);
+      ctx.lineTo(155 + offsetX, 280 + offsetY);
       ctx.fill();
-    }
+    },
+    draw: function () {
+      this.printShape(this.shadowColor, 10, 10);
+      this.printShape(this.fillColor, 0, 0);
+    },
   };
+  var MESSAGE_X = CLOUD_X + CLOUD_WIDTH / 2;
+  var MESSAGE_Y = CLOUD_Y + CLOUD_HEIGHT / 10;
+  var MESSAGE_FONT_GAP = 24;
   var message = {
     text: 'Ура вы победили!\nСписок результатов:',
     font: '16px PT Mono',
@@ -30,62 +32,70 @@ window.renderStatistics = function (ctx, names, times) {
     draw: function () {
       //  divide message into phrases
       var phrases = this.text.split('\n');
-      var phrasesX = cloud.coords[0] + cloud.width / 2;
-      var phrasesY = cloud.height / 8;
-      var phrasesOffset = 24;
       ctx.font = this.font;
       ctx.strokeStyle = this.fillColor;
-      //  cancel shadow params
-      ctx.shadowColor = 'transparent';
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
       //  centered phrases
       for (var i = 0; i < phrases.length; i++) {
-        ctx.strokeText(phrases[i], phrasesX - phrases[i].length * 5, phrasesY + phrasesOffset * i);
+        ctx.strokeText(phrases[i], MESSAGE_X - phrases[i].length * 5, MESSAGE_Y + MESSAGE_FONT_GAP * i);
       }
     }
   };
+  //  const
+  var BARCHART_X = CLOUD_X + (CLOUD_WIDTH - CLOUD_X) / 6;
+  var BARCHART_Y = CLOUD_HEIGHT - 25;
+  var COLUMN_WIDTH = 40;
+  var BARCHART_HEIGHT = 150;
+  var COLUMN_GAP = 50;
+  var BAR_WIDTH = COLUMN_WIDTH + COLUMN_GAP;
+  var MAX_TIME = getMax(times);
+  //  max width Math.max
+  function getMax(items) {
+    return Math.max.apply(null, items);
+  }
+  //  barChart
   var barChart = {
-    columnWidth: 40,
-    height: 150,
-    columnGap: 50,
-    columnCount: names.length,
-    draw: function () {
-      var startPosX = cloud.coords[0] + (cloud.width - cloud.coords[0]) / 6;
-      var barWidth = this.columnGap + this.columnWidth;
-      var maxTime = this.getMax(times);
-      //  bars
-      for (var i = 0; i < names.length; i++) {
-        var time = Math.round(times[i]);
-        var barHeight = time / maxTime * this.height;
-        var startY = cloud.height - barHeight - 25;
-        var startX = startPosX + barWidth * i;
-        //  name
-        if (names[i] !== 'Вы') {
-          ctx.strokeText(names[i], startX, cloud.height);
-          // random saturation
-          var saturation = Math.random() * 100;
-          ctx.fillStyle = 'hsla(240, ' + saturation + '%, 50%, 0.9)';
-        } else {
-          ctx.strokeText(names[i], startX + names[i].length * 10 / 2, cloud.height);
-          // special barColor for 'Вы'
-          ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-        }
-        //  bar
-        ctx.fillRect(startX, startY, this.columnWidth, barHeight);
-        //  time
-        ctx.strokeText(time, startX, startY - 10);
+    printTimes: function () {
+      for (var i = 0; i < times.length; i++) {
+        var position = this.getPosition(i);
+        ctx.strokeText(Math.round(times[i]), position[0], position[1] - 10);
       }
     },
-    getMax: function (items) {
-      var max = 0;
-      for (var i = 0; i < items.length; i++) {
-        if (items[i] > max) {
-          max = items[i];
+    printBars: function () {
+      for (var i = 0; i < names.length; i++) {
+        var coords = this.getPosition(i);
+        ctx.fillStyle = this.getFillColor(names[i]);
+        ctx.fillRect(coords[0], coords[1], COLUMN_WIDTH, this.getBarHeight(times[i]));
+      }
+    },
+    printNames: function () {
+      for (var i = 0; i < names.length; i++) {
+        var startX = BARCHART_X + BAR_WIDTH * i;
+        if (names[i] !== 'Вы') {
+          ctx.strokeText(names[i], startX, CLOUD_HEIGHT);
+        } else {
+          ctx.strokeText(names[i], startX + names[i].length * 10 / 2, CLOUD_HEIGHT);
         }
       }
-      return max;
+    },
+    getFillColor: function (item) {
+      if (item !== 'Вы') {
+        var saturation = Math.random() * 100;
+        return 'hsla(240, ' + saturation + '%, 50%, 0.9)';
+      }
+      return 'rgba(255, 0, 0, 1)';
+    },
+    getPosition: function (i) {
+      var startX = BARCHART_X + BAR_WIDTH * i;
+      var startY = BARCHART_Y - this.getBarHeight(times[i]);
+      return [startX, startY];
+    },
+    getBarHeight: function (time) {
+      return Math.round(time * BARCHART_HEIGHT / MAX_TIME);
+    },
+    draw: function () {
+      this.printTimes();
+      this.printBars();
+      this.printNames();
     }
   };
   cloud.draw();
