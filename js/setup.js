@@ -2,7 +2,7 @@
 
 //  wizards data
 var WIZARDS_COUNT = 4;
-var FIRST_NAMES = [
+var FirstName = [
   'Иван',
   'Хуан Себастьян',
   'Мария',
@@ -12,7 +12,7 @@ var FIRST_NAMES = [
   'Люпита',
   'Вашингтон'
 ];
-var SECOND_NAMES = [
+var SecondName = [
   'да Марья',
   'Верон',
   'Мирабелла',
@@ -22,7 +22,7 @@ var SECOND_NAMES = [
   'Нионго',
   'Ирвинг'
 ];
-var COAT_COLORS = [
+var CoatColor = [
   'rgb(101, 137, 164)',
   'rgb(241, 43, 107)',
   'rgb(146, 100, 161)',
@@ -30,7 +30,7 @@ var COAT_COLORS = [
   'rgb(215, 210, 55)',
   'rgb(0, 0, 0)'
 ];
-var EYES_COLORS = [
+var EyesColor = [
   'black',
   'red',
   'blue',
@@ -63,9 +63,9 @@ function getName(names, surnames) {
 function getWizard() {
   var template = document.querySelector('#similar-wizard-template').content;
   var wizardElement = template.querySelector('.setup-similar-item').cloneNode(true);
-  wizardElement.querySelector('.setup-similar-label').textContent = getName(FIRST_NAMES, SECOND_NAMES);
-  wizardElement.querySelector('.wizard-coat').style.fill = getRandom(COAT_COLORS);
-  wizardElement.querySelector('.wizard-eyes').style.fill = getRandom(EYES_COLORS);
+  wizardElement.querySelector('.setup-similar-label').textContent = getName(FirstName, SecondName);
+  wizardElement.querySelector('.wizard-coat').style.fill = getRandom(CoatColor);
+  wizardElement.querySelector('.wizard-eyes').style.fill = getRandom(EyesColor);
   return wizardElement;
 }
 
