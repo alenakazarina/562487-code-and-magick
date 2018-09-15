@@ -101,6 +101,11 @@
     });
   }
 
+  //  center setup
+  function updateSetupPosition() {
+    setup.style.left = '50%';
+    setup.style.top = '80px';
+  }
   //  check validity + submit
   function submitForm() {
     var inputInvalid = setupForm.querySelector('.setup-user-name:invalid');
@@ -191,7 +196,7 @@
     setup.classList.remove('hidden');
     renderWizards();
     setup.querySelector('.setup-similar').classList.remove('hidden');
-    //  listeners after open setup
+    //  listeners
     document.addEventListener('keydown', onSetupEscPress);
     closeButton.addEventListener('click', onCloseButtonClick);
     closeButton.addEventListener('keydown', onCloseButtonEnterPress);
@@ -207,6 +212,7 @@
   function closeSetup() {
     //  hide setup + remove similar wizards
     setup.classList.add('hidden');
+    updateSetupPosition();
     removeWizards();
     //  remove all listeners after open setup
     document.removeEventListener('keydown', onSetupEscPress);
