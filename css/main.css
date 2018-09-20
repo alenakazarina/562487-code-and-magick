@@ -911,7 +911,26 @@ input[type=radio]:checked + .review-mark-label
 
     transform: translateX(-50%);
 }
-
+.setup-similar-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.setup-error-save {
+  position: absolute;
+  top: 5%;
+  left: 20%;
+  right: 20%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.setup-error-smile {
+  margin-top: 1em;
+}
+.setup-error-message {
+  padding: 0 1em;
+  color: #fff;
+}
 .setup-submit
 {
     display: block;

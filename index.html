@@ -181,6 +181,19 @@
     <p class="setup-similar-label">Петр Петров</p>
   </div>
 </template>
+<template id="setup-error" style="display: none">
+  <div class="setup-similar-error">
+    <svg xmlns="http://www.w3.org/2000/svg" class="setup-error-smile" width="150" height="150" viewBox="0 0 65 65">
+    	<circle cx="32" cy="32" r="29" stroke-width="3" stroke="#d19d00" fill="#ffc107"/>
+    	<circle cx="22" cy="20" r="8" stroke-width="3" fill="#fff"/>
+    	<circle cx="42" cy="20" r="8" stroke-width="3" fill="#fff"/>
+    	<circle cx="22" cy="20" r="3" stroke-width="3" fill="#000"/>
+    	<circle cx="42" cy="20" r="3" stroke-width="3" fill="#000"/>
+    	<rect x="22" y="40" width="20" height="5" rx="3" ry="3"/>
+    </svg>
+    <p class="setup-error-message">Ошибка</p>
+  </div>
+</template>
 <script>
 	var fireballSize = 22;
 	var getFireballSpeed = function(left) {
@@ -198,6 +211,7 @@
 		return height / 3
 	}
 </script>
+<script src="js/backend.js"></script>
 <script src="js/setup.js"></script>
 <script src="js/render-statistics.js"></script>
 <script src="js/game.js"></script>
